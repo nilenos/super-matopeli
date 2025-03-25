@@ -1,0 +1,41 @@
+name: CD – Rakenna ja julkaise .exe
+
+on:
+  push:
+    tags:
+      - 'v*'   # Käynnistyy kun pushaat tagin kuten v1.0.0
+
+jobs:
+  build-and-release:
+    runs-on: windows-latest   # 🪟 Tarvitsemme Windows-ympäristön .exe:n tekoon
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pygame pyinstaller
+
+      - name: Run tests
+        run: |
+          pip install pytest
+          pytest
+
+      - name: Build .exe with PyInstaller
+        run: |
+          pyinstaller --onefile matopeli.py
+
+      - name: Upload .exe to GitHub Releases
+        uses: softprops/action-gh-release@v1
+        with:
+          name: Julkaisu ${{ github.ref_name }}
+          files: dist/matopeli.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
