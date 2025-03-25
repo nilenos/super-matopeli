@@ -1,13 +1,13 @@
-name: CD – Rakenna ja julkaise .exe
+name: CD – Rakenna ja julkaise .exe ilman manuaalista tagia
 
 on:
   push:
     branches:
-      - main   # Käynnistyy kun pushaat tagin kuten v1.0.0
+      - main
 
 jobs:
   build-and-release:
-    runs-on: windows-latest   # 🪟 Tarvitsemme Windows-ympäristön .exe:n tekoon
+    runs-on: windows-latest
 
     steps:
       - name: Checkout
@@ -32,10 +32,19 @@ jobs:
         run: |
           pyinstaller --onefile matopeli.py
 
+      - name: Create auto tag if missing
+        run: |
+          git config user.name "${{ github.actor }}"
+          git config user.email "${{ github.actor }}@users.noreply.github.com"
+          git tag -a auto-latest -m "Automaattinen julkaisu"
+          git push origin auto-latest
+
       - name: Upload .exe to GitHub Releases
         uses: softprops/action-gh-release@v1
         with:
-          name: Julkaisu ${{ github.ref_name }}
+          name: Automaattinen julkaisu
+          tag_name: auto-latest
           files: dist/matopeli.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
