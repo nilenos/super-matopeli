@@ -2,8 +2,8 @@ name: CD – Rakenna ja julkaise .exe
 
 on:
   push:
-    tags:
-      - 'v*'   # Käynnistyy kun pushaat tagin kuten v1.0.0
+    branches:
+      - main   # Käynnistyy kun pushaat tagin kuten v1.0.0
 
 jobs:
   build-and-release:
