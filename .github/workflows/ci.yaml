@@ -22,8 +22,8 @@ jobs:
     - name: Asenna riippuvuudet
       run: |
         python -m pip install --upgrade pip
-        pip install pygame
+        pip install -r requirements.txt
 
     - name: Suorita testit
       run: |
-        echo "Ei vielä testejä – lisää esim. yksikkötestit tähän!"
+        pytest
