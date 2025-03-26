@@ -62,7 +62,7 @@ def peli():
 
         while peli_loppu:
             ruutu.fill(valkoinen)
-            viesti("Pelaa peli 1 uudestaan. Hävisit !  Enter = Uudestaan, Esc = Lopeta", punainen)
+            viesti("Pelaa peli uudestaan. Hävisit !  Enter = Uudestaan, Esc = Lopeta", punainen)
             pisteet(maton_pituus - 1)
             pygame.display.update()
 
